@@ -3,13 +3,22 @@ import { FaRegCommentAlt } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
 import './main.css'
+import { Comment } from "../Comment/comment";
 import moment from "moment";
-import { FcReddit } from "react-icons/fc";
-export const Main = ({home, subreddit}) => {
+import {useDispatch} from 'react-redux'
+import { fetchComment, updateSubreddit } from "../../Store/redditSlice";
+export const Main = ({home, subreddit, selectSubreddit}) => {
     console.log(home)
     console.log(subreddit)
-    if (!home.result || !subreddit.result) {
+    const dispatch = useDispatch();
+    if (!home || !subreddit.result) {
         return <div>Loading...</div>; // Hiển thị loading khi dữ liệu chưa có
+    }
+    function handleClick(subRedditName){
+        dispatch(updateSubreddit(subRedditName))
+    }
+    function commentClick(id, index){
+        dispatch(fetchComment({arg1:selectSubreddit,arg2:id, arg3: index}))
     }
     function choose (article) {
             if (article.data.is_video){
@@ -32,11 +41,13 @@ export const Main = ({home, subreddit}) => {
             return <img src={article.data.icon_img} alt={article.data.title}></img>
         }
     }
-    console.log(subreddit.result.data.children[0].data.icon_img)
+    function renderComment(){
+        
+    }
     return (
         <div className="main">
            <section>
-                {home.result.data.children.map(article=>
+                {home.map((article, index)=>
                     <article key={article.data.id}>
                         <div className="main-content">
                             <div className="container">
@@ -58,7 +69,7 @@ export const Main = ({home, subreddit}) => {
                                         <div className="time">
                                             <p>{moment.unix(article.data.created).fromNow()}</p>
                                         </div>
-                                        <div className="comment">
+                                        <div className="comment" onClick={()=>commentClick((article.data.id), index)}>
                                             <FaRegCommentAlt></FaRegCommentAlt>
                                             <p>{article.data.num_comments} comments</p>
                                         </div>
@@ -74,7 +85,7 @@ export const Main = ({home, subreddit}) => {
                 <h2>Subreddits</h2>
                 <div className="list">
                     {subreddit.result.data.children.map(article=>
-                        <div className="list-content" key={article.data.id}>
+                        <div className="list-content" key={article.data.id} onClick={()=>handleClick(article.data.url)} >
                             {chooseimg(article)}
                             <p>{article.data.title}</p>
                         </div>

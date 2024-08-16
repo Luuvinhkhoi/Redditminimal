@@ -57,11 +57,11 @@ let Reddit = {
       }
       return accessTokenPromise;
     },
-    async home (){
+    async home (selectSubreddit){
       await this.getAccessToken();
       console.log(accessToken)
       if(accessToken){
-        return fetch('https://oauth.reddit.com/r/all/hot',{
+        return fetch(`https://oauth.reddit.com/${selectSubreddit}rising`,{
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -89,7 +89,7 @@ let Reddit = {
       await this.getAccessToken()
       console.log(`YOYOYO${accessToken}`)
       if(accessToken){
-        return fetch('https://oauth.reddit.com/r/home/rising',{
+        return fetch('https://oauth.reddit.com/subreddits/popular',{
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -113,8 +113,33 @@ let Reddit = {
         })
       }
     },
-    getComment(){
-
+    getComment(selectSubreddit, id){
+      console.log(selectSubreddit)
+      console.log(id)
+      if(accessToken){
+        return fetch(`https://oauth.reddit.com/${selectSubreddit}comments/${id}`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+        ).then(response => {
+          if(response.ok){
+            return response.json()
+          }
+          console.log(response)
+          throw new Error(`Request failed with ${response.status}`)
+        }, networkError => {
+          console.log(networkError.message)
+        }).then(jsonReponse => {
+          console.log(jsonReponse)
+          if(!jsonReponse){
+            console.error('Response error')
+          }
+          return jsonReponse
+        })
+      }  
     }
 }
 export default Reddit

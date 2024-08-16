@@ -76,6 +76,9 @@ img{
     gap: 1rem;
     font-weight: bold;
 }
+.list-content:active{
+    background-color: var(--color-branding-transparent);
+}
 @media screen and (max-width: 768px) {
     .main{
         grid-template-columns: repeat(1, 1fr);
