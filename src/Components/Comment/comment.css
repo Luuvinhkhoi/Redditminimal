@@ -1,0 +1,27 @@
+:root{
+    --color-background: #fcfcfc;
+    --color-background-secondary: #f3f3f3;
+    --color-foreground: #fff;
+    --color-border: #e6e6e6;
+    --color-text-header: #444;
+    --color-text-body: #6f6f6f;
+    --color-text-secondary: #717171;
+    --color-text-invert: #fff;
+    --color-text-link: #4ec3f5;
+    --color-branding: #3d5af1;
+    --color-branding-transparent: rgba(61, 90, 241, 0.25);
+    --color-alert: #ff304f;
+    --color-success: #45b81f;
+    --color-on-hover: rgba(0, 0, 0, 0.06);
+    --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+.comment{
+    padding: 1rem 0;
+}
+.comment-detail{
+    display: flex;
+    justify-content: space-between;
+}
+.comment-author{
+    color: var(--color-branding);
+}

@@ -140,6 +140,33 @@ let Reddit = {
           return jsonReponse
         })
       }  
+    },
+    search(selectSubreddit,queryString){
+      console.log(selectSubreddit, queryString)
+      if(accessToken){
+        return fetch(`https://oauth.reddit.com${selectSubreddit}search.json?q=${encodeURIComponent(queryString)}&restrict_sr=1&sort=relevance`,{
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
+        ).then(response => {
+          if(response.ok){
+            return response.json()
+          }
+          console.log(response)
+          throw new Error(`Request failed with ${response.status}`)
+        }, networkError => {
+          console.log(networkError.message)
+        }).then(jsonReponse => {
+          console.log(jsonReponse)
+          if(!jsonReponse){
+            console.error('Response error')
+          }
+          return jsonReponse
+        })
+      }
     }
 }
 export default Reddit

@@ -32,7 +32,7 @@ function App() {
   }, [selectSubreddit])
   return (
     <div className='app'>
-      <Header></Header>
+      <Header selectSubreddit={selectSubreddit}></Header>
       <Main home={selectPost} subreddit={subreddit} selectSubreddit={selectSubreddit}></Main>
     </div>
   );
