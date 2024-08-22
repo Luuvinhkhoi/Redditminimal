@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  display: grid;
 }
 
 .App-logo {
@@ -26,6 +27,7 @@
 img, video{
   width: 100%;
   height: auto;
+  object-fit: contain;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

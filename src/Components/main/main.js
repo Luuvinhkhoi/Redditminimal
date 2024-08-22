@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa";
 import { FaArrowUp } from "react-icons/fa";
-import './main.css'
+import './main.css';
+import { Carousel } from "../Carousel/carousel";
 import { Comment } from "../Comment/comment";
 import moment from "moment";
 import {useDispatch} from 'react-redux'
@@ -11,8 +12,10 @@ export const Main = ({home, subreddit, selectSubreddit}) => {
     console.log(home)
     console.log(subreddit)
     const [select, setSelect]=useState('')
+    const [metadataIndex, setMetadatIndex]=useState(0)
     const [vote, setVote]=useState(1)
     const dispatch = useDispatch();
+    
     if (!home || !subreddit.result) {
         return <div>Loading...</div>; // Hiển thị loading khi dữ liệu chưa có
     }
@@ -34,19 +37,35 @@ export const Main = ({home, subreddit, selectSubreddit}) => {
     function downVote(){
         setVote(prev=>prev-1)
     }
+    function next(){
+        setMetadatIndex(prev=>prev+1)
+    }
+    function previous(){
+        setMetadatIndex(prev=>prev-1)
+    }
     function choose (article) {
             if (article.data.is_video){
               return <video controls>
                         <source src={article.data.secure_media.reddit_video.fallback_url} type="video/mp4" />
                      </video>
-            } else if (article.data.post_hint === "link"){
-               return <a href={article.data.url}target="_blank">
-                  <img src = {article.data.thumbnail}></img>
-                  {article.data.title}
-               </a>
-            } else if (article.data.post_hint === 'image') {
-               return <img src={article.data.url} controls />
-            }
+            } else if (article.data.post_hint === 'image' || article.data.url.endsWith(".jpg") || article.data.url.endsWith(".png") || article.data.url.endsWith(".jpeg")) {
+                return <img src={article.data.url} controls />
+            }else if (article.data.media_metadata){
+                let obj=Object.values(article.data.media_metadata)
+                if (Object.keys(article.data.media_metadata).length>1){
+                    return (
+                    <div className="slide-container">
+                        <img src={obj[0].s.u.replace(/&amp;/g, '&')} controls />
+                    </div>
+                    )
+                } else{
+                    return (
+                    <div>
+                        <img src={obj[0].s.u.replace(/&amp;/g, '&')} controls />
+                    </div>
+                    )
+                }  
+            } 
     }
     function chooseimg(article){
         if (article.data.icon_img===''){
@@ -72,6 +91,9 @@ export const Main = ({home, subreddit, selectSubreddit}) => {
                                     <div className="post-image">
                                         {choose(article)}
                                     </div>
+                                    <div className="post-text">
+                                        <span>{article.data.selftext}</span>
+                                    </div>
                                     <div className="post-detail">
                                         <div className="author-detail">
                                             <p>{article.data.author}</p>
@@ -80,7 +102,7 @@ export const Main = ({home, subreddit, selectSubreddit}) => {
                                             <p>{moment.unix(article.data.created).fromNow()}</p>
                                         </div>
                                         <div className="commenttoggle" onClick={()=>commentClick((article.data.id), index)}>
-                                            <FaRegCommentAlt></FaRegCommentAlt>
+                                            <FaRegCommentAlt className="comment-icon"></FaRegCommentAlt>
                                             <p>{article.data.num_comments} comments</p>
                                         </div>
                                     </div>

@@ -31,7 +31,7 @@ function App() {
     getSubReddit()
   }, [selectSubreddit])
   return (
-    <div className='app'>
+    <div className='App'>
       <Header selectSubreddit={selectSubreddit}></Header>
       <Main home={selectPost} subreddit={subreddit} selectSubreddit={selectSubreddit}></Main>
     </div>
